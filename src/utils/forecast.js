@@ -6,13 +6,13 @@ const forecast = (latitude, longitude, callback) => {
     const location = lat + ',' + long
     const url = 'https://api.darksky.net/forecast/7be51744b9e7cadb02216eb393d9f4fe/'+location+'?units=si'
 
-    request({url: url, json:true}, (error, response) =>{
+    request({url: url, json:true}, (error, {body}) =>{
         if(error){
             callback('Unable to connect services.',undefined)
-        } else if(response.body.error){
+        } else if(body.error){
             callback('Unable to get forecast, Try another search.',undefined)
         } else {
-            callback(undefined, response.body.daily.data[0].summary + ` It is currently ${response.body.currently.temperature} degrees out. There is a ${response.body.currently.precipProbability}% chance of rain.`)
+            callback(undefined, body.daily.data[0].summary + ` It is currently ${body.currently.temperature} degrees out. The high ${body.daily.data[0].temperatureHigh} with a low of ${body.daily.data[0].temperatureLow}. There is a ${body.currently.precipProbability}% chance of rain.`)
         }
     })
 }
